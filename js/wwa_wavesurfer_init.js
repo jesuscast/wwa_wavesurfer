@@ -25,6 +25,15 @@ function dataURItoBlob(dataURI, options) {
     return new Blob([ab], options);
 }
 
+//return a promise that resolves with a File instance
+function urltoFile(url, filename, mimeType){
+    mimeType = mimeType || (url.match(/^data:([^;]+);/)||'')[1];
+    return (fetch(url)
+        .then(function(res){return res.arrayBuffer();})
+        .then(function(buf){return new File([buf], filename, {type:mimeType});})
+    );
+}
+
 document.addEventListener('contextmenu', block, false);
 
 function popup() {
@@ -226,24 +235,27 @@ player.on('finishRecord', function() {
                 }
             })
 
-            var form = new FormData();
-            form.append("filename", name);
-            form.append("file", dataURItoBlob(imgBase, {
-                type: 'image/png'
-            }));
+            //Usage example:
+            urltoFile(imgBase, name)
+            .then(function(file){
+                console.log(file);
+                var form = new FormData();
+                form.append("filename", name);
+                form.append("file", file);
 
-            jQuery.ajax({
-                "async": true,
-                "crossDomain": true,
-                "url": "https://image.kite.ly/upload/",
-                "method": "POST",
-                "processData": false,
-                "contentType": false,
-                "mimeType": "multipart/form-data",
-                "data": form
-            }).done(function(response) {
-                console.log(response);
-            });
+                jQuery.ajax({
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "https://image.kite.ly/upload/",
+                    "method": "POST",
+                    "processData": false,
+                    "contentType": false,
+                    "mimeType": "multipart/form-data",
+                    "data": form
+                }).done(function(response) {
+                    console.log(response);
+                });
+            })
         }
 
         imgToDom();
