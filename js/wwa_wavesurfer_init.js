@@ -47,6 +47,7 @@ popup();
 jQuery("#myAudioClosePopup").click(function() {
     jQuery('#audioTop').slideUp();
 });
+
 // setup videojs-record
 var player = videojs('myAudio', {
     controls: true,
@@ -81,15 +82,8 @@ player.on('error', function (error) {
     console.log('error:', error);
 });
 */
-// data is available
-player.on('finishRecord', function() {
-    // the blob object contains the audio data
-    var audioFile = player.recordedData;
 
-    jQuery('#fileupload').show();
-    jQuery('#wavUpload').show();
-    jQuery('#imageUpload').show();
-
+function uploadFile(audioFile, cb) {
 
     // Initialize the jQuery File Upload widget
     jQuery('#wavUpload').fileupload({
@@ -109,58 +103,91 @@ player.on('finishRecord', function() {
         done: function(e, data) {
             jQuery.each(data.files, function(index, file) {
                 var message = 'Record Upload Complete!';
-
-
+                cb();
             });
         }
     });
+    // upload data to server
+    var filesList = [audioFile];
+    jQuery('#wavUpload').fileupload('add', {
+        files: filesList
+    });
+}
 
-    console.log('Audio_img = none');
-    var audio_img = '';
+function recieveBase(cb) {
+    var a = jQuery('.vjs-waveform').find('wave');
+    a[1].style.borderRight = 'none';
 
-    function recieveBase() {
-        var a = jQuery('.vjs-waveform').find('wave');
-        a[1].style.borderRight = 'none';
+    /*html2canvas(a[0], {
+        height: 270,
+        width: 600,
+        timeout: 0,
+        logging: false}).then(function(canvas) {
 
-        /*html2canvas(a[0], {
-            height: 270,
-            width: 600,
-            timeout: 0,
-            logging: false}).then(function(canvas) {
+            //var toImg = canvas.toDataURL('image/png');
+                           
+            var toImg = canvas.toDataURL("image/png");
+            var span = document.createElement('span');
+            span.setAttribute('id', 'renderedImg');
 
-                //var toImg = canvas.toDataURL('image/png');
-                               
-                var toImg = canvas.toDataURL("image/png");
-                var span = document.createElement('span');
-                span.setAttribute('id', 'renderedImg');
+            span.dataset.base = toImg;
+            audio_img += toImg;
+            document.body.appendChild(span);                
 
-                span.dataset.base = toImg;
-                audio_img += toImg;
-                document.body.appendChild(span);                
+            console.log('imagedata => ' + toImg);
+    });
+    */
+    html2canvas(a[0], {
+        height: 270,
+        width: 600,
+        timeout: 0,
+        logging: false,
+        onrendered: function(canvas) {
+            var toImg = canvas.toDataURL('image/png');
 
-                console.log('imagedata => ' + toImg);
-        });
-        */
-        html2canvas(a[0], {
-            height: 270,
-            width: 600,
-            timeout: 0,
-            logging: false,
-            onrendered: function(canvas) {
-                var toImg = canvas.toDataURL('image/png');
+            console.log('imagedata => ' + toImg);
 
-                console.log('imagedata => ' + toImg);
+            var span = document.createElement('span');
+            span.setAttribute('id', 'renderedImg');
+            span.dataset.base = toImg;
+            document.body.appendChild(span);
+            cb();
+        },
+    });
 
-                var span = document.createElement('span');
-                span.setAttribute('id', 'renderedImg');
-                span.dataset.base = toImg;
-                document.body.appendChild(span);
-            },
-        });
+}
 
+// data is available
+player.on('finishRecord', function() {
+
+    // the blob object contains the audio data
+    var audioFile = player.recordedData;
+
+    jQuery('#fileupload').show();
+    jQuery('#wavUpload').show();
+    jQuery('#imageUpload').show();
+
+    function activatePopup() {
+        var width = window.innerWidth / 4;
+        var findTop = getCoordsTop(myAudio);
+        var findLeft = getCoordsLeft(myAudio);
+        var oldDiv = document.getElementById('audioTop');
+        oldDiv.style.width = myAudio.clientWidth + "px";
+        oldDiv.style.height = myAudio.clientHeight + "px";
+        oldDiv.style.top = findTop + 'px';
+        oldDiv.style.left = findLeft + 'px';
+        oldDiv.style.display = '';
     }
 
-    setTimeout(recieveBase, 1000);
+    var test = +wwav_variables.popup;
+    if (!test) {
+        activatePopup();
+    }
+
+    initUpload(audioFile, function() {
+        console.log("Upload complete!");
+        recieveBase();
+    });
 
     jQuery('#imageUpload').on('click', function() {
         jQuery(this).hide();
@@ -211,29 +238,6 @@ player.on('finishRecord', function() {
             });
         }
 
-        setTimeout(imgToDom, 200);
-    });
-
-    function activatePopup() {
-        var width = window.innerWidth / 4;
-        var findTop = getCoordsTop(myAudio);
-        var findLeft = getCoordsLeft(myAudio);
-        var oldDiv = document.getElementById('audioTop');
-        oldDiv.style.width = myAudio.clientWidth + "px";
-        oldDiv.style.height = myAudio.clientHeight + "px";
-        oldDiv.style.top = findTop + 'px';
-        oldDiv.style.left = findLeft + 'px';
-        oldDiv.style.display = '';
-    }
-
-    var test = +wwav_variables.popup;
-    if (!test) {
-        activatePopup();
-    }
-
-    // upload data to server
-    var filesList = [audioFile];
-    jQuery('#wavUpload').fileupload('add', {
-        files: filesList
+        imgToDom();
     });
 });
