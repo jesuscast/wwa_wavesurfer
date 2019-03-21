@@ -184,7 +184,7 @@ player.on('finishRecord', function() {
         activatePopup();
     }
 
-    initUpload(audioFile, function() {
+    uploadFile(audioFile, function() {
         console.log("Upload complete!");
         recieveBase();
     });
