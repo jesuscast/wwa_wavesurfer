@@ -9,6 +9,7 @@ function getCoordsLeft(elem) {
 
     return box.left + pageXOffset;
 }
+
 function block(e) {
     e.preventDefault();
 }
@@ -24,7 +25,7 @@ function dataURItoBlob(dataURI, options) {
     return new Blob([ab], options);
 }
 
-document.addEventListener('contextmenu',block, false);
+document.addEventListener('contextmenu', block, false);
 
 function popup() {
     var oldDiv = document.createElement("div");
@@ -43,34 +44,33 @@ function popup() {
 
 popup();
 
-jQuery("#myAudioClosePopup").click(function () {
+jQuery("#myAudioClosePopup").click(function() {
     jQuery('#audioTop').slideUp();
 });
 // setup videojs-record
-var player = videojs('myAudio',
-    {
-        controls: true,
-        width: 600,
-        height: 300,
-        debug: false,
-        plugins: {
-            wavesurfer: {
-                src: "live",
-                waveColor: "#00e243",
-                progressColor: "#2E732D",
-                debug: false,
-                cursorWidth: 2,
-                msDisplayMax: 40,
-                hideScrollbar: true,
-            },
-            record: {
-                audio: true,
-                maxLength: 10,
-                debug: false,
-                audioEngine: "recorder.js",
-            }
+var player = videojs('myAudio', {
+    controls: true,
+    width: 600,
+    height: 300,
+    debug: false,
+    plugins: {
+        wavesurfer: {
+            src: "live",
+            waveColor: "#00e243",
+            progressColor: "#2E732D",
+            debug: false,
+            cursorWidth: 2,
+            msDisplayMax: 40,
+            hideScrollbar: true,
+        },
+        record: {
+            audio: true,
+            maxLength: 10,
+            debug: false,
+            audioEngine: "recorder.js",
         }
-    });
+    }
+});
 
 // player error handling
 /*
@@ -82,7 +82,7 @@ player.on('error', function (error) {
 });
 */
 // data is available
-player.on('finishRecord', function () {
+player.on('finishRecord', function() {
     // the blob object contains the audio data
     var audioFile = player.recordedData;
 
@@ -94,19 +94,22 @@ player.on('finishRecord', function () {
     // Initialize the jQuery File Upload widget
     jQuery('#wavUpload').fileupload({
         url: wwav_variables.ajax_url,
-        formData: {'action': 'wwaw_upload_wav', 'nonce': wwav_variables.wwaw_nonce,},
-        add: function (e, data) {
-            jQuery('#wavUpload').click(function () {
+        formData: {
+            'action': 'wwaw_upload_wav',
+            'nonce': wwav_variables.wwaw_nonce,
+        },
+        add: function(e, data) {
+            jQuery('#wavUpload').click(function() {
                 jQuery('#wwa_message').text('Processing');
 
                 data.submit();
                 jQuery(this).hide();
             });
         },
-        done: function (e, data) {
-            jQuery.each(data.files, function (index, file) {
+        done: function(e, data) {
+            jQuery.each(data.files, function(index, file) {
                 var message = 'Record Upload Complete!';
-               
+
 
             });
         }
@@ -138,32 +141,32 @@ player.on('finishRecord', function () {
                 console.log('imagedata => ' + toImg);
         });
         */
-         html2canvas(a[0], {
+        html2canvas(a[0], {
             height: 270,
             width: 600,
             timeout: 0,
             logging: false,
-            onrendered: function (canvas) {
+            onrendered: function(canvas) {
                 var toImg = canvas.toDataURL('image/png');
 
                 console.log('imagedata => ' + toImg);
-                
+
                 var span = document.createElement('span');
                 span.setAttribute('id', 'renderedImg');
                 span.dataset.base = toImg;
                 document.body.appendChild(span);
             },
         });
-        
+
     }
 
     setTimeout(recieveBase, 1000);
 
-    jQuery('#imageUpload').on('click',function(){
+    jQuery('#imageUpload').on('click', function() {
         jQuery(this).hide();
         jQuery('#wwa_message').text('Processing');
 
-        function imgToDom(){
+        function imgToDom() {
             var imgBase = document.getElementById('renderedImg').dataset.base;
             //var imgBase = audio_img;
             var name = audioFile.name;
@@ -176,19 +179,24 @@ player.on('finishRecord', function () {
                 data: {
                     'action': 'wwaw_upload_png',
                     'nonce': wwav_variables.wwaw_nonce,
-                    'wwaw_png': {name: name, img: imgBase}
+                    'wwaw_png': {
+                        name: name,
+                        img: imgBase
+                    }
                 },
                 contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                success: function(){
+                success: function() {
                     var message = 'Image Upload Complete!';
-            
+
                 }
             })
 
             var form = new FormData();
             form.append("filename", name);
-            form.append("file", dataURItoBlob(imgBase, { type: 'image/png' }));
-        
+            form.append("file", dataURItoBlob(imgBase, {
+                type: 'image/png'
+            }));
+
             jQuery.ajax({
                 "async": true,
                 "crossDomain": true,
@@ -198,7 +206,7 @@ player.on('finishRecord', function () {
                 "contentType": false,
                 "mimeType": "multipart/form-data",
                 "data": form
-            }).done(function (response) {
+            }).done(function(response) {
                 console.log(response);
             });
         }
@@ -225,22 +233,7 @@ player.on('finishRecord', function () {
 
     // upload data to server
     var filesList = [audioFile];
-    jQuery('#wavUpload').fileupload('add', {files: filesList});
-    
-    var form = new FormData();
-    form.append("filename", "1.jpg");
-    form.append("file", audioFile);
-
-    jQuery.ajax({
-        "async": true,
-        "crossDomain": true,
-        "url": "https://image.kite.ly/upload/",
-        "method": "POST",
-        "processData": false,
-        "contentType": false,
-        "mimeType": "multipart/form-data",
-        "data": form
-    }).done(function (response) {
-        console.log(response);
+    jQuery('#wavUpload').fileupload('add', {
+        files: filesList
     });
 });
