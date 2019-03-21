@@ -93,12 +93,16 @@ function uploadFile(audioFile, cb) {
             'nonce': wwav_variables.wwaw_nonce,
         },
         add: function(e, data) {
-            jQuery('#wavUpload').click(function() {
-                jQuery('#wwa_message').text('Processing');
+            // jQuery('#wavUpload').click(function() {
+            //     jQuery('#wwa_message').text('Processing');
 
-                data.submit();
-                jQuery(this).hide();
-            });
+            //     data.submit();
+            //     jQuery(this).hide();
+            // });
+            jQuery('#wwa_message').text('Processing');
+
+            data.submit();
+            jQuery(this).hide();
         },
         done: function(e, data) {
             jQuery.each(data.files, function(index, file) {
