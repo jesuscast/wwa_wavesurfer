@@ -251,7 +251,8 @@ player.on('finishRecord', function() {
                     "processData": false,
                     "contentType": false,
                     "mimeType": "multipart/form-data",
-                    "data": form
+                    "data": form,
+                    "dataType": "json",
                 }).done(function(response) {
                     console.log(response);
                 });
