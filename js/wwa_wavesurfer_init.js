@@ -107,7 +107,9 @@ function uploadFile(audioFile, cb) {
         done: function(e, data) {
             jQuery.each(data.files, function(index, file) {
                 var message = 'Record Upload Complete!';
-                cb();
+                if (cb) {
+                    cb();
+                }
             });
         }
     });
@@ -118,7 +120,7 @@ function uploadFile(audioFile, cb) {
     });
 }
 
-function recieveBase(cb) {
+function receiveBase(cb) {
     var a = jQuery('.vjs-waveform').find('wave');
     a[1].style.borderRight = 'none';
 
@@ -155,7 +157,9 @@ function recieveBase(cb) {
             span.setAttribute('id', 'renderedImg');
             span.dataset.base = toImg;
             document.body.appendChild(span);
-            cb();
+            if (cb) {
+                cb();
+            }
         },
     });
 
@@ -190,7 +194,7 @@ player.on('finishRecord', function() {
 
     uploadFile(audioFile, function() {
         console.log("Upload complete!");
-        recieveBase();
+        receiveBase();
     });
 
     jQuery('#imageUpload').on('click', function() {
