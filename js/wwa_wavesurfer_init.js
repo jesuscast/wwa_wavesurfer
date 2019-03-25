@@ -174,46 +174,14 @@ function receiveBase(cb) {
 
 }
 
-// data is available
-player.on('finishRecord', function() {
 
-    // the blob object contains the audio data
-    var audioFile = player.recordedData;
-
-    jQuery('#fileupload').show();
-    jQuery('#wavUpload').show();
-    jQuery('#imageUpload').show();
-
-    function activatePopup() {
-        var width = window.innerWidth / 4;
-        var findTop = getCoordsTop(myAudio);
-        var findLeft = getCoordsLeft(myAudio);
-        var oldDiv = document.getElementById('audioTop');
-        oldDiv.style.width = myAudio.clientWidth + "px";
-        oldDiv.style.height = myAudio.clientHeight + "px";
-        oldDiv.style.top = findTop + 'px';
-        oldDiv.style.left = findLeft + 'px';
-        oldDiv.style.display = '';
-    }
-
-    var test = +wwav_variables.popup;
-    if (!test) {
-        activatePopup();
-    }
-
-    uploadFile(audioFile, function() {
-        console.log("Upload complete!");
-        receiveBase(function(toImg) {
-
-        });
-    });
-
+function listenForUpload(imgBase) {
     jQuery('#imageUpload').on('click', function() {
         jQuery(this).hide();
         jQuery('#wwa_message').text('Processing');
 
         function imgToDom() {
-            var imgBase = document.getElementById('renderedImg').dataset.base;
+            // var imgBase = document.getElementById('renderedImg').dataset.base;
             //var imgBase = audio_img;
             var name = audioFile.name;
             name = name.substr(0, name.length - 3);
@@ -258,5 +226,40 @@ player.on('finishRecord', function() {
         }
 
         imgToDom();
+    });
+};
+
+// data is available
+player.on('finishRecord', function() {
+
+    // the blob object contains the audio data
+    var audioFile = player.recordedData;
+
+    function activatePopup() {
+        var width = window.innerWidth / 4;
+        var findTop = getCoordsTop(myAudio);
+        var findLeft = getCoordsLeft(myAudio);
+        var oldDiv = document.getElementById('audioTop');
+        oldDiv.style.width = myAudio.clientWidth + "px";
+        oldDiv.style.height = myAudio.clientHeight + "px";
+        oldDiv.style.top = findTop + 'px';
+        oldDiv.style.left = findLeft + 'px';
+        oldDiv.style.display = '';
+    }
+
+    var test = +wwav_variables.popup;
+    if (!test) {
+        activatePopup();
+    }
+
+    uploadFile(audioFile, function() {
+        console.log("Upload complete!");
+        receiveBase(function(toImg) {
+            jQuery('#fileupload').show();
+            jQuery('#wavUpload').show();
+            jQuery('#imageUpload').show();
+
+            listenForUpload(toImg);
+        });
     });
 });
