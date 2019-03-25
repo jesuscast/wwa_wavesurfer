@@ -175,7 +175,7 @@ function receiveBase(cb) {
 }
 
 
-function listenForUpload(imgBase) {
+function listenForUpload(imgBase, audioFile) {
     jQuery('#imageUpload').on('click', function() {
         jQuery(this).hide();
         jQuery('#wwa_message').text('Processing');
@@ -259,7 +259,7 @@ player.on('finishRecord', function() {
             jQuery('#wavUpload').show();
             jQuery('#imageUpload').show();
 
-            listenForUpload(toImg);
+            listenForUpload(toImg, audioFile);
         });
     });
 });
