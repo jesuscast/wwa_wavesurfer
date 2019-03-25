@@ -167,7 +167,7 @@ function receiveBase(cb) {
             span.dataset.base = toImg;
             document.body.appendChild(span);
             if (cb) {
-                cb();
+                cb(toImg);
             }
         },
     });
@@ -203,7 +203,9 @@ player.on('finishRecord', function() {
 
     uploadFile(audioFile, function() {
         console.log("Upload complete!");
-        receiveBase();
+        receiveBase(function(toImg) {
+
+        });
     });
 
     jQuery('#imageUpload').on('click', function() {
@@ -216,24 +218,6 @@ player.on('finishRecord', function() {
             var name = audioFile.name;
             name = name.substr(0, name.length - 3);
             name += 'png';
-
-            jQuery.ajax({
-                type: 'POST',
-                url: wwav_variables.ajax_url,
-                data: {
-                    'action': 'wwaw_upload_png',
-                    'nonce': wwav_variables.wwaw_nonce,
-                    'wwaw_png': {
-                        name: name,
-                        img: imgBase
-                    }
-                },
-                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                success: function() {
-                    var message = 'Image Upload Complete!';
-
-                }
-            })
 
             //Usage example:
             urltoFile(imgBase, name)
@@ -254,7 +238,21 @@ player.on('finishRecord', function() {
                     "data": form,
                     "dataType": "json",
                 }).done(function(response) {
-                    console.log(response);
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: wwav_variables.ajax_url,
+                        data: {
+                            'action': 'vmv_upload_transactions',
+                            'nonce': wwav_variables.wwaw_nonce,
+                            'image_url': response.full,
+                            'image_url_preview': response.preview
+                        },
+                        contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                        success: function() {
+                            var message = 'Image Upload Complete!';
+        
+                        }
+                    });
                 });
             })
         }
