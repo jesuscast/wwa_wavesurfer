@@ -96,7 +96,7 @@ add_action('wp_ajax_nopriv_wwaw_upload_png', 'wwaw_denied_upload_png');
 add_action('wp_ajax_vmv_upload_transactions', 'vmv_upload_transactions');
 
 function vmv_upload_transactions() {
-	global $wpdb
+	global $wpdb;
 	$data = array(
 		"image_url" => $_POST['image_url'],
 		"image_url_preview" => $_POST['image_url_preview']
@@ -114,7 +114,7 @@ function vmv_upload_transactions() {
     $return = array(
         "hey" => "yo",
     );
-    wp_send_json($return)
+    wp_send_json($return);
 }
 
 function wwaw_upload_png()
