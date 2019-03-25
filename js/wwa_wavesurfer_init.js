@@ -206,6 +206,11 @@ function listenForUpload(imgBase, audioFile) {
                     "data": form,
                     "dataType": "json",
                 }).done(function(response) {
+                    // var message = 'Image Upload Complete!';
+                    var $link = jQuery("a #go3").parent();
+                    var url = new URL(jQuery("a #go3").parent().attr('href'));
+                    url.search = new URLSearchParams({"img": response.full})
+                    $link.attr('href', url.href);
                     jQuery.ajax({
                         type: 'POST',
                         url: wwav_variables.ajax_url,
@@ -217,11 +222,7 @@ function listenForUpload(imgBase, audioFile) {
                         },
                         contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                         success: function(response) {
-                            // var message = 'Image Upload Complete!';
-                            var $link = jQuery("a #go3").parent();
-                            var url = new Url(jQuery("a #go3").parent().attr('href'));
-                            url.search = new URLSearchParams({"img": response.full})
-                            $link.attr('href', url.href);
+                            console.log(response);
                         }
                     });
                 });
