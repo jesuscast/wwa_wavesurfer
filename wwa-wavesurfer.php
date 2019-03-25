@@ -100,19 +100,21 @@ function vmv_upload_transactions() {
 	$data = array(
 		"image_url" => $_POST['image_url'],
 		"image_url_preview" => $_POST['image_url_preview']
-	);
+    );
+    $values = array();   
 	foreach ( $data as $name => $value ) {
 		$values[ $name ] = sprintf( '%s=%s', $name, $wpdb->prepare( '%s', maybe_serialize( $value ) ) );
 	}
-	$wpdb->query(
-		sprintf(
-			'INSERT INTO vmv_upload_transactions',
-			implode( ', ', $values )
-		)
-    );
+	// $wpdb->query(
+	// 	sprintf(
+	// 		'INSERT INTO vmv_upload_transactions',
+	// 		implode( ', ', $values )
+	// 	)
+    // );
     
+    $insertStat = $wpdb->insert( 'vmv_upload_transactions', $values );
     $return = array(
-        "hey" => "yo",
+        "hey" => $insertStat,
     );
     wp_send_json($return);
 }
