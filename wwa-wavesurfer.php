@@ -103,7 +103,7 @@ function vmv_upload_transactions() {
     );
     $values = array();   
 	foreach ( $data as $name => $value ) {
-		$values[ $name ] = sprintf( '%s=%s', $name, $wpdb->prepare( '%s', maybe_serialize( $value ) ) );
+		$values[ $name ] = $wpdb->prepare( '%s', maybe_serialize( $value ) );
 	}
 	// $wpdb->query(
 	// 	sprintf(
