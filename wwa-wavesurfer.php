@@ -42,7 +42,7 @@ if (!function_exists('wwaw_add_folder')) {
 }
 
 add_action('wp_ajax_wwaw_upload_wav', 'wwaw_upload_wav');
-add_action('wp_ajax_nopriv_wwaw_upload_wav', 'wwaw_denied_upload_file');
+add_action('wp_ajax_nopriv_wwaw_upload_wav', 'wwaw_upload_wav');
 
 function wwaw_upload_wav()
 {
@@ -92,8 +92,9 @@ function wwaw_upload_wav()
 }
 
 add_action('wp_ajax_wwaw_upload_png', 'wwaw_upload_png');
-add_action('wp_ajax_nopriv_wwaw_upload_png', 'wwaw_denied_upload_png');
+add_action('wp_ajax_nopriv_wwaw_upload_png', 'wwaw_upload_png');
 add_action('wp_ajax_vmv_upload_transactions', 'vmv_upload_transactions');
+add_action('wp_ajax_nopriv_vmv_upload_transactions', 'vmv_upload_transactions');
 
 function vmv_upload_transactions() {
 	global $wpdb;
