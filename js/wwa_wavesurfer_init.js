@@ -252,9 +252,9 @@ player.on('finishRecord', function() {
     }
 
     var test = +wwav_variables.popup;
-    if (!test) {
-        activatePopup();
-    }
+    // if (!test) {
+    //     activatePopup();
+    // }
 
     uploadFile(audioFile, function() {
         console.log("Upload complete!");
