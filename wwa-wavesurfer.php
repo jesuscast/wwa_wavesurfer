@@ -162,10 +162,13 @@ function wwaw_upload_png()
 
     unset($_POST['wwaw_png']);
 
-    if(is_user_logged_in()) {
-        $current_user = wp_get_current_user();
-        update_user_meta($current_user->ID, 'my_wave_audio_attach_id', $attach_id);
-    }
+    $current_user = wp_get_current_user();
+    update_user_meta($current_user->ID, 'my_wave_audio_attach_id', $attach_id);
+    
+    // if(is_user_logged_in()) {
+    //     $current_user = wp_get_current_user();
+    //     update_user_meta($current_user->ID, 'my_wave_audio_attach_id', $attach_id);
+    // }
 
     wp_die();
 }
@@ -196,29 +199,44 @@ function wwaw_create_shortcode($atts)
 
     $html = '<audio id="myAudio" class="video-js vjs-default-skin"></audio>';
 
-    if (is_user_logged_in()) {
-        $variables = array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'wwaw_nonce' => wp_create_nonce('wwaw_nonce'),
-            'popup' => 1
-        );
+    $variables = array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'wwaw_nonce' => wp_create_nonce('wwaw_nonce'),
+        'popup' => 1
+    );
 
-        $html .= '<div id="holder_for_fileupload">';
-        $html .= '<div id="fileupload">';
-        $html .= '<button id="wavUpload" type="file" name="files[]" multiple>Upload Record</button>';
-        $html .= '<button id="imageUpload" name="wwaw-png"></button>';
-        $html .= '<span id="wwa_message"></span>';
+    $html .= '<div id="holder_for_fileupload">';
+    $html .= '<div id="fileupload">';
+    $html .= '<button id="wavUpload" type="file" name="files[]" multiple>Upload Record</button>';
+    $html .= '<button id="imageUpload" name="wwaw-png"></button>';
+    $html .= '<span id="wwa_message"></span>';
+  
+    $html .= '</div>';
+    $html .= '</div>';
+
+    // if (is_user_logged_in()) {
+    //     $variables = array(
+    //         'ajax_url' => admin_url('admin-ajax.php'),
+    //         'wwaw_nonce' => wp_create_nonce('wwaw_nonce'),
+    //         'popup' => 1
+    //     );
+
+    //     $html .= '<div id="holder_for_fileupload">';
+    //     $html .= '<div id="fileupload">';
+    //     $html .= '<button id="wavUpload" type="file" name="files[]" multiple>Upload Record</button>';
+    //     $html .= '<button id="imageUpload" name="wwaw-png"></button>';
+    //     $html .= '<span id="wwa_message"></span>';
       
-        $html .= '</div>';
-        $html .= '</div>';
+    //     $html .= '</div>';
+    //     $html .= '</div>';
 
-    } else {
-        $variables = array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'wwaw_nonce' => wp_create_nonce('wwaw_nonce'),
-            'popup' => 0
-        );
-    }
+    // } else {
+    //     $variables = array(
+    //         'ajax_url' => admin_url('admin-ajax.php'),
+    //         'wwaw_nonce' => wp_create_nonce('wwaw_nonce'),
+    //         'popup' => 0
+    //     );
+    // }
 
     wp_localize_script('wwaw_html2canvas', 'wwav_variables', $variables);
 
