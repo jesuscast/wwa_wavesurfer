@@ -51,7 +51,7 @@ function popup() {
     document.body.appendChild(oldDiv);
 }
 
-popup();
+// popup();
 
 jQuery("#myAudioClosePopup").click(function() {
     jQuery('#audioTop').slideUp();
