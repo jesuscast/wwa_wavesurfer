@@ -175,7 +175,7 @@ function receiveBase(cb) {
 }
 
 
-function listenForUpload(imgBase, audioFile) {
+function listenForUpload(imgBase, audioFile, cb) {
     jQuery('#imageUpload').on('click', function() {
         jQuery(this).hide();
         jQuery('#wwa_message').text('Processing');
@@ -211,6 +211,7 @@ function listenForUpload(imgBase, audioFile) {
                     var url = new URL(jQuery("a #go3").parent().attr('href'));
                     url.search = new URLSearchParams({"img": response.full})
                     $link.attr('href', url.href);
+                    cb();
                     jQuery.ajax({
                         type: 'POST',
                         url: wwav_variables.ajax_url,
@@ -259,11 +260,11 @@ player.on('finishRecord', function() {
     uploadFile(audioFile, function() {
         console.log("Upload complete!");
         receiveBase(function(toImg) {
-            jQuery('#fileupload').show();
-            jQuery('#wavUpload').show();
-            jQuery('#imageUpload').show();
-
-            listenForUpload(toImg, audioFile);
+            listenForUpload(toImg, audioFile, function() {
+                jQuery('#fileupload').show();
+                jQuery('#wavUpload').show();
+                jQuery('#imageUpload').show();
+            });
         });
     });
 });
