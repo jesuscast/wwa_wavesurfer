@@ -186,7 +186,7 @@ function listenForUpload(imgBase, audioFile, cb) {
             var name = audioFile.name;
             name = name.substr(0, name.length - 3);
             name += 'png';
-
+            jQuery("#go3 .fft").html("Loading...")
             //Usage example:
             urltoFile(imgBase, name)
             .then(function(file){
@@ -211,7 +211,7 @@ function listenForUpload(imgBase, audioFile, cb) {
                     var url = new URL(jQuery("a #go3").parent().attr('href'));
                     url.search = new URLSearchParams({"img": response.full})
                     $link.attr('href', url.href);
-                    cb();
+                    jQuery("#go3 .fft").html("Create products")
                     jQuery.ajax({
                         type: 'POST',
                         url: wwav_variables.ajax_url,
@@ -260,10 +260,10 @@ player.on('finishRecord', function() {
     uploadFile(audioFile, function() {
         console.log("Upload complete!");
         receiveBase(function(toImg) {
+            jQuery('#fileupload').show();
+            jQuery('#wavUpload').show();
+            jQuery('#imageUpload').show();
             listenForUpload(toImg, audioFile, function() {
-                jQuery('#fileupload').show();
-                jQuery('#wavUpload').show();
-                jQuery('#imageUpload').show();
             });
         });
     });
