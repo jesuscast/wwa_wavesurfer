@@ -209,7 +209,8 @@ function listenForUpload(imgBase, audioFile, cb) {
                     // var message = 'Image Upload Complete!';
                     var $link = jQuery("a #go3").parent();
                     var url = new URL(jQuery("a #go3").parent().attr('href'));
-                    url.search = new URLSearchParams({"img": response.full})
+                    url.search = new URLSearchParams({"img": response.full});
+                    url.pathname = "/create-products/"
                     $link.attr('href', url.href);
                     jQuery("#go3 .fft").html("Create products")
                     jQuery.ajax({
