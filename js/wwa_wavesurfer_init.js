@@ -210,7 +210,10 @@ function listenForUpload(imgBase, audioFile, cb) {
                     var $link = jQuery("a #go3").parent();
                     var url = new URL(jQuery("a #go3").parent().attr('href'));
                     url.search = new URLSearchParams({"img": response.full});
-                    url.pathname = "/create-products/"
+                    url.pathname = "/create-products/";
+                    // we need to remove the www so it matches the response
+                    // so the localstorage works..
+                    url.href = url.href.replace(/www\.view/g,'view');
                     localStorage.setItem('img', response.full);
                     $link.attr('href', url.href);
                     jQuery("#go3 .fft").html("Create products")
