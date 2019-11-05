@@ -83,14 +83,14 @@ var player = videojs('myAudio', {
 });
 
 // player error handling
-/*
+
 player.on('deviceError', function () {
     console.warn('device error:', player.deviceErrorCode);
 });
 player.on('error', function (error) {
     console.log('error:', error);
 });
-*/
+
 
 function uploadFile(audioFile, cb) {
 
